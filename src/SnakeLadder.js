@@ -8,66 +8,73 @@ const snakes = { 16: 6, 48: 30, 64: 60, 79: 19, 93: 68, 95: 24, 97: 76, 98: 78 }
 const ladders = { 10: 38, 4: 14, 9: 31, 21: 42, 28: 84, 36: 44, 51: 67, 71: 91, 80: 100 };
 
 const playerEmojis = ['🔴', '🟢', '🔵', '🟡'];
+const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
 
 export default function SnakeLadder() {
   const [positions, setPositions] = useState([1, 1, 1, 1]);
   const [currentPlayer, setCurrentPlayer] = useState(0);
   const [message, setMessage] = useState('🎲 Player 🔴, roll the dice!');
   const [diceValue, setDiceValue] = useState(null);
+  const [diceFace, setDiceFace] = useState(null);
   const [rolling, setRolling] = useState(false);
   const [movingToken, setMovingToken] = useState(null);
-  const [diceAnimating, setDiceAnimating] = useState(false);
 
   const rollDice = () => {
     if (rolling) return;
     setRolling(true);
-    setDiceAnimating(true);
+    setDiceFace(null);
 
-    const dice = Math.floor(Math.random() * 6) + 1;
+    let rollCount = 0;
+    const interval = setInterval(() => {
+      const random = Math.floor(Math.random() * 6);
+      setDiceFace(diceFaces[random]);
+      rollCount++;
+      if (rollCount >= 10) {
+        clearInterval(interval);
+        const final = Math.floor(Math.random() * 6) + 1;
+        setDiceValue(final);
+        setDiceFace(diceFaces[final - 1]);
 
-    setTimeout(() => {
-      setDiceValue(dice);
-      setDiceAnimating(false);
+        let newPos = positions[currentPlayer] + final;
 
-      let newPos = positions[currentPlayer] + dice;
-
-      if (newPos > totalCells) {
-        setMessage(`⚠️ Player ${playerEmojis[currentPlayer]} rolled ${dice} but can't move.`);
-        setRolling(false);
-        return;
-      }
-
-      animateMove(currentPlayer, positions[currentPlayer], newPos, () => {
-        let finalPos = newPos;
-        if (snakes[newPos]) {
-          finalPos = snakes[newPos];
-          setMessage(`🐍 Snake bite! ${newPos} → ${finalPos}`);
-        } else if (ladders[newPos]) {
-          finalPos = ladders[newPos];
-          setMessage(`🪜 Ladder climb! ${newPos} → ${finalPos}`);
-        } else {
-          setMessage(`🎲 Player ${playerEmojis[currentPlayer]} moved to ${newPos}`);
+        if (newPos > totalCells) {
+          setMessage(`⚠️ Player ${playerEmojis[currentPlayer]} rolled ${final} but can't move.`);
+          setRolling(false);
+          return;
         }
 
-        setTimeout(() => {
-          setPositions((prev) => {
-            const updated = [...prev];
-            updated[currentPlayer] = finalPos;
-            return updated;
-          });
-
-          if (finalPos === 100) {
-            setMessage(`🎉 Player ${playerEmojis[currentPlayer]} wins!`);
+        animateMove(currentPlayer, positions[currentPlayer], newPos, () => {
+          let finalPos = newPos;
+          if (snakes[newPos]) {
+            finalPos = snakes[newPos];
+            setMessage(`🐍 Snake bite! ${newPos} → ${finalPos}`);
+          } else if (ladders[newPos]) {
+            finalPos = ladders[newPos];
+            setMessage(`🪜 Ladder climb! ${newPos} → ${finalPos}`);
           } else {
-            const nextPlayer = (currentPlayer + 1) % 4;
-            setCurrentPlayer(nextPlayer);
-            setMessage(`🎲 Player ${playerEmojis[nextPlayer]}, your turn!`);
+            setMessage(`🎲 Player ${playerEmojis[currentPlayer]} moved to ${newPos}`);
           }
 
-          setRolling(false);
-        }, 600);
-      });
-    }, 500);
+          setTimeout(() => {
+            setPositions((prev) => {
+              const updated = [...prev];
+              updated[currentPlayer] = finalPos;
+              return updated;
+            });
+
+            if (finalPos === 100) {
+              setMessage(`🎉 Player ${playerEmojis[currentPlayer]} wins!`);
+            } else {
+              const nextPlayer = (currentPlayer + 1) % 4;
+              setCurrentPlayer(nextPlayer);
+              setMessage(`🎲 Player ${playerEmojis[nextPlayer]}, your turn!`);
+            }
+
+            setRolling(false);
+          }, 600);
+        });
+      }
+    }, 100);
   };
 
   const animateMove = (playerIndex, from, to, onDone) => {
@@ -170,15 +177,11 @@ export default function SnakeLadder() {
         </div>
 
         <div className="right-panel">
-          <button onClick={rollDice} disabled={rolling} className="roll-button">
+          <button onClick={rollDice} disabled={rolling}>
             🎲 Roll Dice
           </button>
           <p>{message}</p>
-          {diceValue && (
-            <div className={`dice-display ${diceAnimating ? 'animate' : ''}`}>
-              🎯 You rolled: <strong>{diceValue}</strong>
-            </div>
-          )}
+          {diceFace && <p>🎯 Dice Face: <span style={{ fontSize: '5rem' }}>{diceFace}</span></p>}
         </div>
       </div>
     </div>
