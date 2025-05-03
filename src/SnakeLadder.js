@@ -16,51 +16,58 @@ export default function SnakeLadder() {
   const [diceValue, setDiceValue] = useState(null);
   const [rolling, setRolling] = useState(false);
   const [movingToken, setMovingToken] = useState(null);
+  const [diceAnimating, setDiceAnimating] = useState(false);
 
   const rollDice = () => {
     if (rolling) return;
     setRolling(true);
+    setDiceAnimating(true);
 
     const dice = Math.floor(Math.random() * 6) + 1;
-    setDiceValue(dice);
-    let newPos = positions[currentPlayer] + dice;
 
-    if (newPos > totalCells) {
-      setMessage(`⚠️ Player ${playerEmojis[currentPlayer]} rolled ${dice} but can't move.`);
-      setRolling(false);
-      return;
-    }
+    setTimeout(() => {
+      setDiceValue(dice);
+      setDiceAnimating(false);
 
-    animateMove(currentPlayer, positions[currentPlayer], newPos, () => {
-      let finalPos = newPos;
-      if (snakes[newPos]) {
-        finalPos = snakes[newPos];
-        setMessage(`🐍 Snake bite! ${newPos} → ${finalPos}`);
-      } else if (ladders[newPos]) {
-        finalPos = ladders[newPos];
-        setMessage(`🪜 Ladder climb! ${newPos} → ${finalPos}`);
-      } else {
-        setMessage(`🎲 Player ${playerEmojis[currentPlayer]} moved to ${newPos}`);
+      let newPos = positions[currentPlayer] + dice;
+
+      if (newPos > totalCells) {
+        setMessage(`⚠️ Player ${playerEmojis[currentPlayer]} rolled ${dice} but can't move.`);
+        setRolling(false);
+        return;
       }
 
-      setTimeout(() => {
-        setPositions((prev) => {
-          const updated = [...prev];
-          updated[currentPlayer] = finalPos;
-          return updated;
-        });
-
-        if (finalPos === 100) {
-          setMessage(`🎉 Player ${playerEmojis[currentPlayer]} wins!`);
+      animateMove(currentPlayer, positions[currentPlayer], newPos, () => {
+        let finalPos = newPos;
+        if (snakes[newPos]) {
+          finalPos = snakes[newPos];
+          setMessage(`🐍 Snake bite! ${newPos} → ${finalPos}`);
+        } else if (ladders[newPos]) {
+          finalPos = ladders[newPos];
+          setMessage(`🪜 Ladder climb! ${newPos} → ${finalPos}`);
         } else {
-          const nextPlayer = (currentPlayer + 1) % 4;
-          setCurrentPlayer(nextPlayer);
-          setMessage(`🎲 Player ${playerEmojis[nextPlayer]}, your turn!`);
+          setMessage(`🎲 Player ${playerEmojis[currentPlayer]} moved to ${newPos}`);
         }
 
-        setRolling(false);
-      }, 600);
-    });
+        setTimeout(() => {
+          setPositions((prev) => {
+            const updated = [...prev];
+            updated[currentPlayer] = finalPos;
+            return updated;
+          });
+
+          if (finalPos === 100) {
+            setMessage(`🎉 Player ${playerEmojis[currentPlayer]} wins!`);
+          } else {
+            const nextPlayer = (currentPlayer + 1) % 4;
+            setCurrentPlayer(nextPlayer);
+            setMessage(`🎲 Player ${playerEmojis[nextPlayer]}, your turn!`);
+          }
+
+          setRolling(false);
+        }, 600);
+      });
+    }, 500);
   };
 
   const animateMove = (playerIndex, from, to, onDone) => {
@@ -114,28 +121,28 @@ export default function SnakeLadder() {
       <div className="game-wrapper">
         <div className="board">
           {[...Array(boardSize)].map((_, row) =>
-                [...Array(boardSize)].map((_, col) => {
-                const isReversed = row % 2 === 1;
-                const actualCol = isReversed ? boardSize - 1 - col : col;
-                const cellNum = totalCells - (row * boardSize + actualCol);
+            [...Array(boardSize)].map((_, col) => {
+              const isReversed = row % 2 === 1;
+              const actualCol = isReversed ? boardSize - 1 - col : col;
+              const cellNum = totalCells - (row * boardSize + actualCol);
 
-                return (
-                    <div key={cellNum} className="cell">
-                    <div className="cell-number">{cellNum}</div>
-                    {snakes[cellNum] && (
-                        <div className="cell-icon">
-                        🐍 <span className="target red">{snakes[cellNum]}</span>
-                        </div>
-                    )}
-                    {ladders[cellNum] && (
-                        <div className="cell-icon">
-                        🪜 <span className="target green">{ladders[cellNum]}</span>
-                        </div>
-                    )}
+              return (
+                <div key={cellNum} className="cell">
+                  <div className="cell-number">{cellNum}</div>
+                  {snakes[cellNum] && (
+                    <div className="cell-icon">
+                      🐍 <span className="target red">{snakes[cellNum]}</span>
                     </div>
-                );
-                })
-            )}
+                  )}
+                  {ladders[cellNum] && (
+                    <div className="cell-icon">
+                      🪜 <span className="target green">{ladders[cellNum]}</span>
+                    </div>
+                  )}
+                </div>
+              );
+            })
+          )}
 
           <div className="tokens">
             {[...positions.entries()].map(([i, pos]) => {
@@ -163,9 +170,15 @@ export default function SnakeLadder() {
         </div>
 
         <div className="right-panel">
-          <button onClick={rollDice} disabled={rolling}>🎲 Roll Dice</button>
+          <button onClick={rollDice} disabled={rolling} className="roll-button">
+            🎲 Roll Dice
+          </button>
           <p>{message}</p>
-          {diceValue && <p>🎯 You rolled: <strong>{diceValue}</strong></p>}
+          {diceValue && (
+            <div className={`dice-display ${diceAnimating ? 'animate' : ''}`}>
+              🎯 You rolled: <strong>{diceValue}</strong>
+            </div>
+          )}
         </div>
       </div>
     </div>
