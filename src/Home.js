@@ -6,29 +6,31 @@ function Home() {
   const navigate = useNavigate();
 
   const handleLaunch = (game) => {
-    const sound = new Audio('/sounds/click.mp3');
-    sound.play();
     setTimeout(() => {
       if (game === "Snake & Ladder") {
-        navigate("/snake-ladder"); // Navigate to Snake & Ladder
+        navigate("/snake-ladder");
+      } else if (game === "Tic Tac Toe") {
+        navigate("/tic-tac-toe");
       } else {
         alert(`${game} is coming soon!`);
       }
-    }, 400); // Brief delay for animation
+    }, 400);
   };
+
+  const games = [
+    { name: 'Snake & Ladder', icon: '🎲', desc: 'Roll dice and climb or slide!' },
+    { name: 'Chess', icon: '♟️', desc: 'Strategize, think, win!' },
+    { name: 'Tic Tac Toe', icon: '❌⭕', desc: '3 in a row wins!' },
+  ];
 
   return (
     <div className="App">
       <h1>🎮 Game Launcher</h1>
       <div className="card-container">
-        {[
-          { name: 'Snake & Ladder', icon: '🎲', desc: 'Roll dice and climb or slide!' },
-          { name: 'Chess', icon: '♟️', desc: 'Strategize, think, win!' },
-          { name: 'Tic Tac Toe', icon: '❌⭕', desc: '3 in a row wins!' },
-        ].map((game, index) => (
+        {games.map((game, index) => (
           <div
             key={game.name}
-            className={`game-card tooltip`}
+            className="game-card tooltip"
             onClick={() => handleLaunch(game.name)}
             style={{ animationDelay: `${index * 0.2}s` }}
           >
