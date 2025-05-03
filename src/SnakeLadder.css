@@ -1,7 +1,7 @@
 .snake-ladder-container {
     text-align: center;
     font-family: 'Arial Rounded MT Bold', sans-serif;
-    max-width: 600px;
+    max-width: 1000px;
     margin: auto;
   }
   
@@ -9,17 +9,16 @@
     position: relative;
     display: grid;
     grid-template-columns: repeat(10, 1fr);
-    width: 100%;
+    width: 500px;
     aspect-ratio: 1 / 1;
     border: 2px solid #555;
-    margin: 10px auto;
+    background-color: #f0f8ff;
   }
   
   .cell {
     border: 1px solid #ddd;
     position: relative;
     font-size: 0.7rem;
-    background-color: #f0f8ff;
   }
   
   .cell:nth-child(odd) {
@@ -38,7 +37,7 @@
     position: absolute;
     bottom: 2px;
     right: 4px;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
   }
   
   .target {
@@ -68,13 +67,6 @@
     transform: translate(-50%, -50%);
   }
   
-  button {
-    padding: 10px 20px;
-    margin-top: 10px;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-  
   .players {
     display: flex;
     justify-content: center;
@@ -84,7 +76,7 @@
   
   .player-info {
     font-size: 1.5rem;
-    padding: 5px;
+    padding: 5px 10px;
   }
   
   .active-player {
@@ -92,5 +84,30 @@
     border-radius: 8px;
     background: #ffffe0;
     box-shadow: 0 0 8px gold;
+  }
+  
+  button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  .game-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .right-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    max-width: 200px;
+    gap: 10px;
+    padding-top: 10px;
   }
   

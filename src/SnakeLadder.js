@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './SnakeLadder.css';
 
 const boardSize = 10;
 const totalCells = 100;
 
 const snakes = { 16: 6, 48: 30, 64: 60, 79: 19, 93: 68, 95: 24, 97: 76, 98: 78 };
-const ladders = { 1: 38, 4: 14, 9: 31, 21: 42, 28: 84, 36: 44, 51: 67, 71: 91, 80: 100 };
+const ladders = { 10: 38, 4: 14, 9: 31, 21: 42, 28: 84, 36: 44, 51: 67, 71: 91, 80: 100 };
 
 const playerEmojis = ['🔴', '🟢', '🔵', '🟡'];
 
@@ -111,54 +111,63 @@ export default function SnakeLadder() {
         ))}
       </div>
 
-      <div className="board">
-        {[...Array(totalCells)].map((_, i) => {
-          const cellNum = totalCells - i;
-          return (
-            <div key={cellNum} className="cell">
-              <div className="cell-number">{cellNum}</div>
-              {snakes[cellNum] && (
-                <div className="cell-icon snake-icon">
-                  🐍 <span className="target red">{snakes[cellNum]}</span>
-                </div>
-              )}
-              {ladders[cellNum] && (
-                <div className="cell-icon ladder-icon">
-                  🪜 <span className="target green">{ladders[cellNum]}</span>
-                </div>
-              )}
-            </div>
-          );
-        })}
+      <div className="game-wrapper">
+        <div className="board">
+          {[...Array(boardSize)].map((_, row) =>
+                [...Array(boardSize)].map((_, col) => {
+                const isReversed = row % 2 === 1;
+                const actualCol = isReversed ? boardSize - 1 - col : col;
+                const cellNum = totalCells - (row * boardSize + actualCol);
 
-        <div className="tokens">
-          {[...positions.entries()].map(([i, pos]) => {
-            const playersInSameCell = getPlayerPositionsInCell(pos);
-            const indexInCell = playersInSameCell.indexOf(i);
-            const effectivePos =
-              movingToken?.playerIndex === i ? movingToken.pos : positions[i];
-            const { top, left } = getCoordinates(effectivePos, indexInCell);
+                return (
+                    <div key={cellNum} className="cell">
+                    <div className="cell-number">{cellNum}</div>
+                    {snakes[cellNum] && (
+                        <div className="cell-icon">
+                        🐍 <span className="target red">{snakes[cellNum]}</span>
+                        </div>
+                    )}
+                    {ladders[cellNum] && (
+                        <div className="cell-icon">
+                        🪜 <span className="target green">{ladders[cellNum]}</span>
+                        </div>
+                    )}
+                    </div>
+                );
+                })
+            )}
 
-            return (
-              <div
-                key={i}
-                className="token"
-                style={{
-                  top,
-                  left,
-                  transition: movingToken?.playerIndex === i ? 'none' : 'top 0.3s, left 0.3s',
-                }}
-              >
-                {playerEmojis[i]}
-              </div>
-            );
-          })}
+          <div className="tokens">
+            {[...positions.entries()].map(([i, pos]) => {
+              const playersInSameCell = getPlayerPositionsInCell(pos);
+              const indexInCell = playersInSameCell.indexOf(i);
+              const effectivePos =
+                movingToken?.playerIndex === i ? movingToken.pos : positions[i];
+              const { top, left } = getCoordinates(effectivePos, indexInCell);
+
+              return (
+                <div
+                  key={i}
+                  className="token"
+                  style={{
+                    top,
+                    left,
+                    transition: movingToken?.playerIndex === i ? 'none' : 'top 0.3s, left 0.3s',
+                  }}
+                >
+                  {playerEmojis[i]}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="right-panel">
+          <button onClick={rollDice} disabled={rolling}>🎲 Roll Dice</button>
+          <p>{message}</p>
+          {diceValue && <p>🎯 You rolled: <strong>{diceValue}</strong></p>}
         </div>
       </div>
-
-      <button onClick={rollDice} disabled={rolling}>🎲 Roll Dice</button>
-      <p>{message}</p>
-      {diceValue && <p>🎯 You rolled: <strong>{diceValue}</strong></p>}
     </div>
   );
 }
