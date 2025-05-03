@@ -1,128 +1,96 @@
 .snake-ladder-container {
     text-align: center;
-    font-family: 'Comic Sans MS', cursive, sans-serif;
+    font-family: 'Arial Rounded MT Bold', sans-serif;
+    max-width: 600px;
+    margin: auto;
   }
   
   .board {
+    position: relative;
     display: grid;
     grid-template-columns: repeat(10, 1fr);
-    width: 500px;
-    height: 500px;
-    position: relative;
-    margin: 0 auto;
-    border: 3px solid #222;
-    background: linear-gradient(to bottom right, #fefcea, #f1da36);
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border: 2px solid #555;
+    margin: 10px auto;
   }
   
   .cell {
+    border: 1px solid #ddd;
     position: relative;
-    border: 1px solid #ccc;
-    width: 50px;
-    height: 50px;
-    font-family: 'Arial Rounded MT Bold', sans-serif;
-    font-size: 14px;
-    background: #fdfdfd;
-  }
-  
-  .cell:nth-child(even) {
-    background-color: #e1f5fe;
+    font-size: 0.7rem;
+    background-color: #f0f8ff;
   }
   
   .cell:nth-child(odd) {
-    background-color: #fce4ec;
+    background-color: #e6f2ff;
   }
   
   .cell-number {
     position: absolute;
     top: 2px;
     left: 4px;
-    font-size: 12px;
     font-weight: bold;
-    z-index: 2;
-    color: #333;
+    font-size: 0.75rem;
   }
   
   .cell-icon {
     position: absolute;
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    background: rgba(255, 255, 255, 0.85);
-    padding: 1px 3px;
-    border-radius: 3px;
-    z-index: 1;
-  }
-
-.cell-icon.snake {
     bottom: 2px;
-    left: 2px;
+    right: 4px;
+    font-size: 0.9rem;
   }
   
-  .cell-icon.ladder {
-    bottom: 2px;
-    right: 2px;
+  .target {
+    font-size: 0.6rem;
+    vertical-align: super;
   }
   
-  .snake-target {
-    font-size: 10px;
+  .red {
     color: red;
-    margin-left: 2px;
   }
   
-  .ladder-target {
-    font-size: 10px;
+  .green {
     color: green;
-    margin-left: 2px;
   }
   
   .tokens {
     position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    pointer-events: none;
   }
   
   .token {
     position: absolute;
-    font-size: 16px;
+    font-size: 1.2rem;
     transform: translate(-50%, -50%);
   }
   
   button {
-    margin-top: 20px;
     padding: 10px 20px;
-    font-size: 18px;
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    border-radius: 5px;
+    margin-top: 10px;
+    font-size: 1rem;
     cursor: pointer;
   }
   
-  button:disabled {
-    background-color: #9e9e9e;
-    cursor: not-allowed;
-  }
-  
-  p {
-    font-size: 16px;
-    margin-top: 12px;
-    color: #333;
-  }
-
-  
-  .board {
+  .players {
     display: flex;
-    flex-direction: column-reverse;
-    width: 500px;
-    height: 500px;
-    border: 2px solid #000;
-    position: relative;
-    margin-bottom: 20px;
+    justify-content: center;
+    margin-bottom: 10px;
+    gap: 15px;
   }
   
-  .row {
-    display: flex;
-    flex: 1;
+  .player-info {
+    font-size: 1.5rem;
+    padding: 5px;
+  }
+  
+  .active-player {
+    border: 2px solid gold;
+    border-radius: 8px;
+    background: #ffffe0;
+    box-shadow: 0 0 8px gold;
   }
   

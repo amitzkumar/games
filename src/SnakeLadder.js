@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './SnakeLadder.css';
 
 const boardSize = 10;
 const totalCells = 100;
 
 const snakes = { 16: 6, 48: 30, 64: 60, 79: 19, 93: 68, 95: 24, 97: 76, 98: 78 };
-const ladders = { 10: 38, 4: 14, 9: 31, 21: 42, 28: 84, 36: 44, 51: 67, 71: 91, 80: 100 };
+const ladders = { 1: 38, 4: 14, 9: 31, 21: 42, 28: 84, 36: 44, 51: 67, 71: 91, 80: 100 };
 
 const playerEmojis = ['🔴', '🟢', '🔵', '🟡'];
 
@@ -15,6 +15,7 @@ export default function SnakeLadder() {
   const [message, setMessage] = useState('🎲 Player 🔴, roll the dice!');
   const [diceValue, setDiceValue] = useState(null);
   const [rolling, setRolling] = useState(false);
+  const [movingToken, setMovingToken] = useState(null);
 
   const rollDice = () => {
     if (rolling) return;
@@ -30,7 +31,7 @@ export default function SnakeLadder() {
       return;
     }
 
-    setTimeout(() => {
+    animateMove(currentPlayer, positions[currentPlayer], newPos, () => {
       let finalPos = newPos;
       if (snakes[newPos]) {
         finalPos = snakes[newPos];
@@ -42,21 +43,37 @@ export default function SnakeLadder() {
         setMessage(`🎲 Player ${playerEmojis[currentPlayer]} moved to ${newPos}`);
       }
 
-      setPositions((prev) => {
-        const updated = [...prev];
-        updated[currentPlayer] = finalPos;
-        return updated;
-      });
+      setTimeout(() => {
+        setPositions((prev) => {
+          const updated = [...prev];
+          updated[currentPlayer] = finalPos;
+          return updated;
+        });
 
-      if (finalPos === 100) {
-        setMessage(`🎉 Player ${playerEmojis[currentPlayer]} wins!`);
-      } else {
-        setCurrentPlayer((prev) => (prev + 1) % 4);
-        setMessage(`🎲 Player ${playerEmojis[(currentPlayer + 1) % 4]}, your turn!`);
+        if (finalPos === 100) {
+          setMessage(`🎉 Player ${playerEmojis[currentPlayer]} wins!`);
+        } else {
+          const nextPlayer = (currentPlayer + 1) % 4;
+          setCurrentPlayer(nextPlayer);
+          setMessage(`🎲 Player ${playerEmojis[nextPlayer]}, your turn!`);
+        }
+
+        setRolling(false);
+      }, 600);
+    });
+  };
+
+  const animateMove = (playerIndex, from, to, onDone) => {
+    let step = from + 1;
+    const interval = setInterval(() => {
+      setMovingToken({ playerIndex, pos: step });
+      step++;
+      if (step > to) {
+        clearInterval(interval);
+        setMovingToken(null);
+        onDone();
       }
-
-      setRolling(false);
-    }, 800);
+    }, 100);
   };
 
   const getCoordinates = (cell, indexInCell = 0) => {
@@ -65,15 +82,14 @@ export default function SnakeLadder() {
     const colInRow = idx % boardSize;
     const reversed = row % 2 === 1;
     const col = reversed ? boardSize - 1 - colInRow : colInRow;
-    const cellSize = 500 / boardSize;
+    const cellSize = 100 / boardSize;
 
-    // Slight offset for multiple tokens in one cell
-    const offsetX = (indexInCell % 2) * 12 - 6;
-    const offsetY = Math.floor(indexInCell / 2) * 12 - 6;
+    const offsetX = (indexInCell % 2) * 10 - 5;
+    const offsetY = Math.floor(indexInCell / 2) * 10 - 5;
 
     return {
-      left: col * cellSize + cellSize / 2 + offsetX,
-      top: (boardSize - 1 - row) * cellSize + cellSize / 2 + offsetY,
+      left: `calc(${col * cellSize}% + ${cellSize / 2}% + ${offsetX}px)`,
+      top: `calc(${(boardSize - 1 - row) * cellSize}% + ${cellSize / 2}% + ${offsetY}px)`,
     };
   };
 
@@ -84,43 +100,54 @@ export default function SnakeLadder() {
     <div className="snake-ladder-container">
       <h1>🐍🪜 Snake & Ladder</h1>
 
+      <div className="players">
+        {playerEmojis.map((emoji, index) => (
+          <span
+            key={index}
+            className={`player-info ${index === currentPlayer ? 'active-player' : ''}`}
+          >
+            {emoji}
+          </span>
+        ))}
+      </div>
+
       <div className="board">
-       {[...Array(boardSize)].map((_, rowIdx) => {
-            const rowCells = [...Array(boardSize)].map((_, colIdx) => {
-            const actualCol = rowIdx % 2 === 0 ? colIdx : boardSize - 1 - colIdx;
-            const cellNum = (rowIdx * boardSize + actualCol) +1;
-            return (
-                <div key={cellNum} className="cell">
-                <div className="cell-number">{cellNum}</div>
-                {snakes[cellNum] && (
-                    <div className="cell-icon snake">
-                    🐍 <span className="snake-target">{snakes[cellNum]}</span>
-                    </div>
-                )}
-                {ladders[cellNum] && (
-                    <div className="cell-icon ladder">
-                    🪜 <span className="ladder-target">{ladders[cellNum]}</span>
-                    </div>
-                )}
+        {[...Array(totalCells)].map((_, i) => {
+          const cellNum = totalCells - i;
+          return (
+            <div key={cellNum} className="cell">
+              <div className="cell-number">{cellNum}</div>
+              {snakes[cellNum] && (
+                <div className="cell-icon snake-icon">
+                  🐍 <span className="target red">{snakes[cellNum]}</span>
                 </div>
-            );
-            });
-            return (
-            <div key={rowIdx} className="row">
-                {rowCells}
+              )}
+              {ladders[cellNum] && (
+                <div className="cell-icon ladder-icon">
+                  🪜 <span className="target green">{ladders[cellNum]}</span>
+                </div>
+              )}
             </div>
-            );
+          );
         })}
+
         <div className="tokens">
-          {positions.map((pos, i) => {
+          {[...positions.entries()].map(([i, pos]) => {
             const playersInSameCell = getPlayerPositionsInCell(pos);
-            const positionIndex = playersInSameCell.indexOf(i);
-            const { top, left } = getCoordinates(pos, positionIndex);
+            const indexInCell = playersInSameCell.indexOf(i);
+            const effectivePos =
+              movingToken?.playerIndex === i ? movingToken.pos : positions[i];
+            const { top, left } = getCoordinates(effectivePos, indexInCell);
+
             return (
               <div
                 key={i}
                 className="token"
-                style={{ top: `${top}px`, left: `${left}px` }}
+                style={{
+                  top,
+                  left,
+                  transition: movingToken?.playerIndex === i ? 'none' : 'top 0.3s, left 0.3s',
+                }}
               >
                 {playerEmojis[i]}
               </div>
