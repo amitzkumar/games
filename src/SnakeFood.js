@@ -22,15 +22,17 @@ export default function SnakeFood() {
 
 function generateFood(snake) {
   let newFood;
-  let isOnSnake = true;
 
-  while (isOnSnake) {
+  function isOnSnake(segment) {
+    return segment.x === newFood.x && segment.y === newFood.y;
+  }
+
+  do {
     newFood = {
       x: Math.floor(Math.random() * boardSize),
       y: Math.floor(Math.random() * boardSize)
     };
-    isOnSnake = snake.some(seg => seg.x === newFood.x && seg.y === newFood.y);
-  }
+  } while (snake.some(isOnSnake));
 
   return newFood;
 }
