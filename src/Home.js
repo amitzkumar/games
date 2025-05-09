@@ -9,10 +9,12 @@ function Home() {
     setTimeout(() => {
       if (game === "Snake & Ladder") {
         navigate("/snake-ladder");
-      }else if (game === "Tic Tac Toe") {
+      } else if (game === "Tic Tac Toe") {
         navigate("/tic-tac-toe");
-      }  else if (game === "Chess") {
+      } else if (game === "Chess") {
         navigate("/chess");
+      } else if (game === "SnakeFood") {
+        navigate("/snake-food");
       } else {
         alert(`${game} is coming soon!`);
       }
@@ -23,6 +25,7 @@ function Home() {
     { name: 'Snake & Ladder', icon: '🎲', desc: 'Roll dice and climb or slide!' },
     { name: 'Chess', icon: '♟️', desc: 'Strategize, think, win!' },
     { name: 'Tic Tac Toe', icon: '❌⭕', desc: '3 in a row wins!' },
+    { name: 'SnakeFood', icon: '🍎', desc: 'Eat food, don’t crash!' },
   ];
 
   return (
