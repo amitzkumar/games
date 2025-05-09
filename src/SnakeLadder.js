@@ -14,7 +14,6 @@ export default function SnakeLadder() {
   const [positions, setPositions] = useState([1, 1, 1, 1]);
   const [currentPlayer, setCurrentPlayer] = useState(0);
   const [message, setMessage] = useState('🎲 Player 🔴, roll the dice!');
-  const [diceValue, setDiceValue] = useState(null);
   const [diceFace, setDiceFace] = useState(null);
   const [rolling, setRolling] = useState(false);
   const [movingToken, setMovingToken] = useState(null);
@@ -32,7 +31,6 @@ export default function SnakeLadder() {
       if (rollCount >= 10) {
         clearInterval(interval);
         const final = Math.floor(Math.random() * 6) + 1;
-        setDiceValue(final);
         setDiceFace(diceFaces[final - 1]);
 
         let newPos = positions[currentPlayer] + final;

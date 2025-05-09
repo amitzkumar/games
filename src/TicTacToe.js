@@ -87,8 +87,8 @@ export default function TicTacToe() {
       </div>
 
       {winner && (
-        <div className="modal">
-          <div className="modal-content">
+        <div className="tic-modal">
+          <div className="tic-modal-content">
             <h2>
               {winner.winner === 'draw'
                 ? '🤝 It\'s a draw!'
