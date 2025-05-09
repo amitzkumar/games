@@ -17,6 +17,8 @@ function Home() {
         navigate("/snake-food");
       } else if (game === "Stone Paper Scissors") {
         navigate("/stone-paper-scissors");
+      } else if (game === "Sudoku") {
+        navigate("/sudoku");
       } else {
         alert(`${game} is coming soon!`);
       }
@@ -29,9 +31,10 @@ function Home() {
     { name: 'Tic Tac Toe', icon: '❌⭕', desc: '3 in a row wins!' },
     { name: 'SnakeFood', icon: '🐍', desc: 'Eat food, don’t crash!' },
     { name: 'Stone Paper Scissors', icon: '🪨📄✂️', desc: 'Classic hand game!' },
+    { name: 'Sudoku', icon: '🔢', desc: 'Logic number puzzle!' },
   ];
 
-  // Split games into chunks of 4
+  // Group games in rows of 4
   const rows = [];
   for (let i = 0; i < games.length; i += 4) {
     rows.push(games.slice(i, i + 4));

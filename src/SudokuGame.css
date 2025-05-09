@@ -1,0 +1,112 @@
+.sudoku-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    text-align: center;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .sudoku-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #3b3b98;
+  }
+  
+  .sudoku-board {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    border: 3px solid #3b3b98;
+    border-radius: 10px;
+    overflow: hidden;
+    animation: fadeIn 0.5s ease-in;
+  }
+  
+  .sudoku-cell {
+    border: 1px solid #ddd;
+    height: 50px;
+    line-height: 50px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    background: #f0f4ff;
+    transition: background 0.2s;
+  }
+  
+  .sudoku-cell:hover {
+    background: #e2eaff;
+  }
+  
+  .sudoku-selected {
+    background: #ffd6d6 !important;
+  }
+  
+  .sudoku-highlight {
+    background: #fef2c7;
+  }
+  
+  .sudoku-readonly {
+    font-weight: bold;
+    color: #3b3b98;
+    background: #e0e0e0 !important;
+  }
+  
+  .sudoku-inputs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    gap: 10px;
+  }
+  
+  .sudoku-input-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+    background-color: #3b3b98;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .sudoku-input-btn:hover {
+    background-color: #5a5ad2;
+    transform: scale(1.1);
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  
+  .sudoku-rules-section {
+    margin: 20px auto;
+    max-width: 500px;
+    text-align: left;
+    background: #fdfdfd;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+  
+  .sudoku-toggle-rules {
+    background-color: #5c6bc0;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .sudoku-rules ul {
+    padding-left: 20px;
+    font-size: 15px;
+    color: #333;
+    margin: 0;
+  }
+  
+  .sudoku-rules li {
+    margin-bottom: 8px;
+  }
+  

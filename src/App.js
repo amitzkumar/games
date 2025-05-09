@@ -5,6 +5,7 @@ import TicTacToe from './TicTacToe';
 import ChessGame from './ChessGame'; 
 import SnakeFood from './SnakeFood';
 import StonePaperScissors from './StonePaperScissors'; 
+import SudokuGame from './SudokuGame';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/chess" element={<ChessGame />} />
         <Route path="/snake-food" element={<SnakeFood />} />
         <Route path="/stone-paper-scissors" element={<StonePaperScissors />} /> 
+        <Route path="/sudoku" element={<SudokuGame />} />
       </Routes>
     </Router>
   );
