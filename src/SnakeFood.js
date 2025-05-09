@@ -20,16 +20,21 @@ export default function SnakeFood() {
   const [gameOver, setGameOver] = useState(false);
   const boardRef = useRef(null);
 
-  function generateFood(snake) {
-    let newFood;
-    do {
-      newFood = {
-        x: Math.floor(Math.random() * boardSize),
-        y: Math.floor(Math.random() * boardSize)
-      };
-    } while (snake.some(seg => seg.x === newFood.x && seg.y === newFood.y));
-    return newFood;
+function generateFood(snake) {
+  let newFood;
+  let isOnSnake = true;
+
+  while (isOnSnake) {
+    newFood = {
+      x: Math.floor(Math.random() * boardSize),
+      y: Math.floor(Math.random() * boardSize)
+    };
+    isOnSnake = snake.some(seg => seg.x === newFood.x && seg.y === newFood.y);
   }
+
+  return newFood;
+}
+
 
   useEffect(() => {
     const handleKeyDown = (e) => {
