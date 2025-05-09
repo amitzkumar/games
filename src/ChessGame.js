@@ -14,7 +14,8 @@ export default function ChessGame() {
   const [gameOver, setGameOver] = useState(false);
   const [resultMessage, setResultMessage] = useState('');
   const [invalidMoveMessage, setInvalidMoveMessage] = useState('');
-  const [captured, setCaptured] = useState({ w: [], b: [] }); // ✅ Captured pieces
+  const [captured, setCaptured] = useState({ w: [], b: [] });
+  const [theme, setTheme] = useState('light');
 
   useEffect(() => {
     if (game.isGameOver()) {
@@ -117,19 +118,23 @@ export default function ChessGame() {
     setGameOver(false);
     setResultMessage('');
     setInvalidMoveMessage('');
-    setCaptured({ w: [], b: [] }); // Reset captured pieces
+    setCaptured({ w: [], b: [] });
+  };
+
+  const toggleTheme = () => {
+    setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
   };
 
   return (
-    <div className="chess-container">
+    <div className={`chess-container ${theme}`}>
       <h1>♟️ Local 2-Player Chess</h1>
 
       <div className="info-panel">
         <div className={`timer ${turn === 'w' ? 'active' : ''}`}>⬜ White: {formatTime(time.w)}</div>
+        <button onClick={toggleTheme} className="reset-button">🌓 Toggle Theme</button>
         <div className={`timer ${turn === 'b' ? 'active' : ''}`}>⬛ Black: {formatTime(time.b)}</div>
       </div>
 
-      {/* ✅ Captured Pieces */}
       <div className="captured-section">
         <div className="captured-row">⬛ Black Captured: {captured.w.map((p, i) => <span key={i}>{getPieceFromType(p, 'w')}</span>)}</div>
         <div className="captured-row">⬜ White Captured: {captured.b.map((p, i) => <span key={i}>{getPieceFromType(p, 'b')}</span>)}</div>
@@ -139,24 +144,27 @@ export default function ChessGame() {
         <div className="invalid-popup">{invalidMoveMessage}</div>
       )}
 
-      <div className="chess-board">
-        {board.map((row, i) => (
-          <div key={i} className="chess-row">
-            {row.map((cell, j) => {
-              const square = 'abcdefgh'[j] + (8 - i);
-              return (
-                <div
-                  key={j}
-                  className={`chess-cell ${getSquareColor(i, j)} ${isHighlighted(square) ? 'highlight' : ''}`}
-                  onClick={() => handleSquareClick(i, j)}
-                >
-                  <span className="piece">{getPieceSymbol(cell)}</span>
-                </div>
-              );
-            })}
-          </div>
-        ))}
-      </div>
+        <div className="board-wrapper">
+        <div className="chess-board">
+            {board.map((row, i) => (
+            <div key={i} className="chess-row">
+                {row.map((cell, j) => {
+                const square = 'abcdefgh'[j] + (8 - i);
+                return (
+                    <div
+                    key={j}
+                    className={`chess-cell ${getSquareColor(i, j)} ${isHighlighted(square) ? 'highlight' : ''}`}
+                    onClick={() => handleSquareClick(i, j)}
+                    >
+                    <span className="piece">{getPieceSymbol(cell)}</span>
+                    {isHighlighted(square) && <div className="dot" />}
+                    </div>
+                );
+                })}
+            </div>
+            ))}
+        </div>
+        </div>
 
       <button className="reset-button" onClick={resetGame}>🔄 New Game</button>
 
