@@ -6,6 +6,7 @@ import ChessGame from './ChessGame';
 import SnakeFood from './SnakeFood';
 import StonePaperScissors from './StonePaperScissors'; 
 import SudokuGame from './SudokuGame';
+import DragonGame from './DragonGame';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/snake-food" element={<SnakeFood />} />
         <Route path="/stone-paper-scissors" element={<StonePaperScissors />} /> 
         <Route path="/sudoku" element={<SudokuGame />} />
+        <Route path="/dragon" element={<DragonGame />} />
       </Routes>
     </Router>
   );

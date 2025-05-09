@@ -7,31 +7,42 @@ function Home() {
 
   const handleLaunch = (game) => {
     setTimeout(() => {
-      if (game === "Snake & Ladder") {
-        navigate("/snake-ladder");
-      } else if (game === "Tic Tac Toe") {
-        navigate("/tic-tac-toe");
-      } else if (game === "Chess") {
-        navigate("/chess");
-      } else if (game === "SnakeFood") {
-        navigate("/snake-food");
-      } else if (game === "Stone Paper Scissors") {
-        navigate("/stone-paper-scissors");
-      } else if (game === "Sudoku") {
-        navigate("/sudoku");
-      } else {
-        alert(`${game} is coming soon!`);
+      switch (game) {
+        case "Snake & Ladder":
+          navigate("/snake-ladder");
+          break;
+        case "Tic Tac Toe":
+          navigate("/tic-tac-toe");
+          break;
+        case "Chess":
+          navigate("/chess");
+          break;
+        case "SnakeFood":
+          navigate("/snake-food");
+          break;
+        case "Stone Paper Scissors":
+          navigate("/stone-paper-scissors");
+          break;
+        case "Sudoku":
+          navigate("/sudoku");
+          break;
+        case "Dog Jump":
+          navigate("/dragon"); // or `/dog-jump` if renamed
+          break;
+        default:
+          alert(`${game} is coming soon!`);
       }
     }, 400);
   };
 
   const games = [
-    { name: 'Snake & Ladder', icon: '🎲', desc: 'Roll dice and climb or slide!' },
+    { name: 'Snake & Ladder', icon: '🐍🪜', desc: 'Roll dice and climb or slide!' },
     { name: 'Chess', icon: '♟️', desc: 'Strategize, think, win!' },
     { name: 'Tic Tac Toe', icon: '❌⭕', desc: '3 in a row wins!' },
-    { name: 'SnakeFood', icon: '🐍', desc: 'Eat food, don’t crash!' },
+    { name: 'SnakeFood', icon: '🐍🍎', desc: 'Eat food, don’t crash!' },
     { name: 'Stone Paper Scissors', icon: '🪨📄✂️', desc: 'Classic hand game!' },
     { name: 'Sudoku', icon: '🔢', desc: 'Logic number puzzle!' },
+    { name: 'Dog Jump', icon: '🐕', desc: 'Hold space, dodge blocks!' },
   ];
 
   // Group games in rows of 4
