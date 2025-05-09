@@ -9,8 +9,10 @@ function Home() {
     setTimeout(() => {
       if (game === "Snake & Ladder") {
         navigate("/snake-ladder");
-      } else if (game === "Tic Tac Toe") {
+      }else if (game === "Tic Tac Toe") {
         navigate("/tic-tac-toe");
+      }  else if (game === "Chess") {
+        navigate("/chess");
       } else {
         alert(`${game} is coming soon!`);
       }
